@@ -8,22 +8,22 @@ import org.springframework.stereotype.Component;
 
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.message.PosPropostaAnalisadaMessage;
+import br.com.camila.statemachine.message.PosAnalisadaMessage;
 import br.com.camila.statemachine.messaging.Messaging;
 import br.com.camila.statemachine.statemachine.CustomStateMachineService;
 import br.com.camila.statemachine.statemachine.AbstractStateMachineContextBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@RabbitListener(queues = Messaging.QUEUE_POS_PROPOSTA_ANALISADA)
+@RabbitListener(queues = Messaging.QUEUE_POS_ANALISADA)
 @Slf4j
-public class PosPropostaAnalisadaListener extends AbstractStateMachineContextBuilder<Estados, Eventos> {
+public class PosAnalisadaListener extends AbstractStateMachineContextBuilder<Estados, Eventos> {
 
     @Autowired
     private CustomStateMachineService customStateMachineService;
 
     @RabbitHandler
-    void receive(@Payload final PosPropostaAnalisadaMessage message) {
+    void receive(@Payload final PosAnalisadaMessage message) {
 
         log.info("Mensagem: {}", message);
 

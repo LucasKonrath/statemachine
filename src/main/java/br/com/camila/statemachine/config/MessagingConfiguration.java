@@ -29,12 +29,12 @@ public class MessagingConfiguration {
 
     @Bean
     Queue criarPropostaQueue() {
-        return new Queue(Messaging.QUEUE_CRIAR_PROPOSTA);
+        return new Queue(Messaging.QUEUE_CRIAR);
     }
 
     @Bean
     Queue analisarPrePropostaQueue() {
-        return new Queue(Messaging.QUEUE_ANALISAR_PRE_PROPOSTA);
+        return new Queue(Messaging.QUEUE_ANALISAR_PRE);
     }
 
     @Bean
@@ -49,12 +49,12 @@ public class MessagingConfiguration {
 
     @Bean
     Queue analisarPosPropostaQueue() {
-        return new Queue(Messaging.QUEUE_ANALISAR_POS_PROPOSTA);
+        return new Queue(Messaging.QUEUE_ANALISAR_POS);
     }
 
     @Bean
     Queue prePropostaAnalisadaQueue() {
-        return new Queue(Messaging.QUEUE_PRE_PROPOSTA_ANALISADA);
+        return new Queue(Messaging.QUEUE_PRE_ANALISADA);
     }
 
     @Bean
@@ -69,7 +69,7 @@ public class MessagingConfiguration {
 
     @Bean
     Queue posPropostaAnalisadaQueue() {
-        return new Queue(Messaging.QUEUE_POS_PROPOSTA_ANALISADA);
+        return new Queue(Messaging.QUEUE_POS_ANALISADA);
     }
 
     /**

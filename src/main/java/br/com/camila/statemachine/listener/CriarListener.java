@@ -10,29 +10,29 @@ import org.springframework.stereotype.Component;
 
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.message.CriarPropostaMessage;
+import br.com.camila.statemachine.message.CriarMessage;
 import br.com.camila.statemachine.messaging.Messaging;
-import br.com.camila.statemachine.service.proposta.CriarPropostaService;
+import br.com.camila.statemachine.service.proposta.CriarService;
 import br.com.camila.statemachine.statemachine.AbstractStateMachineContextBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@RabbitListener(queues = Messaging.QUEUE_CRIAR_PROPOSTA)
+@RabbitListener(queues = Messaging.QUEUE_CRIAR)
 @Slf4j
-public class CriarPropostaListener extends AbstractStateMachineContextBuilder<Estados, Eventos> {
+public class CriarListener extends AbstractStateMachineContextBuilder<Estados, Eventos> {
 
     @Autowired
-    private CriarPropostaService criarPropostaService;
+    private CriarService criarService;
 
     @RabbitHandler
-    void receive(@Payload final CriarPropostaMessage message, @Headers final MessageHeaders headers) {
+    void receive(@Payload final CriarMessage message, @Headers final MessageHeaders headers) {
 
         log.info("Mensagem: {}", message);
 
         try {
 
             log.info("Inicia persistência da proposta para o cpf: {}", message.getCpf());
-            criarPropostaService.executar(message.getCpf(), message.getProposta());
+            criarService.executar(message.getCpf(), message.getProposta());
             log.info("Finaliza persistência da proposta para o cpf: {}", message.getCpf());
 
         } catch (final Exception e) {

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.camila.statemachine.domain.Eventos;
 import br.com.camila.statemachine.domain.Estados;
-import br.com.camila.statemachine.service.proposta.AtualizarPropostaService;
+import br.com.camila.statemachine.service.proposta.AtualizarService;
 import br.com.camila.statemachine.service.auditoria.SalvarAuditoriaService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomStateMachineInterceptor extends AbstractStateMachineContextBuilder<Estados, Eventos> implements StateMachineInterceptor<Estados, Eventos> {
 
     @Autowired
-    private AtualizarPropostaService atualizarPropostaService;
+    private AtualizarService atualizarService;
 
     @Autowired
     private CustomStateMachinePersist persist;
@@ -52,14 +52,14 @@ public class CustomStateMachineInterceptor extends AbstractStateMachineContextBu
                 Estados estado = stateMachine.getState().getId();
 
                 log.info("Iniciada atualização da proposta de número: {}", numeroProposta);
-                atualizarPropostaService.executar(numeroProposta, estado);
+                atualizarService.executar(numeroProposta, estado);
                 log.info("Finalizada atualização da proposta de número: {}", numeroProposta);
 
                 log.info("Iniciada persistência da SM com numero de proposta: {}", numeroProposta);
                 persist.write(buildStateMachineContext(stateMachine), numeroProposta.toString());
                 log.info("Finalizada persistência da SM com numero de proposta: {}", numeroProposta);
 
-                if (!stateMachine.getState().getId().equals(Estados.PROPOSTA_INEXISTENTE)) {
+                if (!stateMachine.getState().getId().equals(Estados.P_INEXISTENTE)) {
                     salvarAuditoriaService.executar(numeroProposta, stateMachine.getId());
                 }
 

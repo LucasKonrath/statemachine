@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.domain.TipoProposta;
+import br.com.camila.statemachine.domain.Tipo;
 import br.com.camila.statemachine.entity.Auditoria;
 import br.com.camila.statemachine.repository.AuditoriaRepository;
 import br.com.camila.statemachine.statemachine.CustomStateMachineService;
@@ -27,9 +27,10 @@ public class SalvarAuditoriaService {
 
     public void executar(Long numeroProposta, String proposta) {
 
-        TipoProposta tipoProposta = TipoProposta.valueOf(proposta);
+        Tipo tipo = Tipo.valueOf(proposta);
 
-        StateMachine<Estados, Eventos> stateMachine = customStateMachineService.getStateMachine(numeroProposta.toString(), tipoProposta);
+        StateMachine<Estados, Eventos> stateMachine = customStateMachineService.getStateMachine(numeroProposta.toString(),
+            tipo);
 
         LocalDateTime now = LocalDateTime.now();
         Timestamp timestamp = Timestamp.valueOf(now);

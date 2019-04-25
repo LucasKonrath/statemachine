@@ -8,36 +8,36 @@ import org.springframework.stereotype.Component;
 
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.domain.TipoProposta;
-import br.com.camila.statemachine.message.PrePropostaAnalisadaMessage;
+import br.com.camila.statemachine.domain.Tipo;
+import br.com.camila.statemachine.message.PreAnalisadaMessage;
 import br.com.camila.statemachine.messaging.Messaging;
 import br.com.camila.statemachine.statemachine.AbstractStateMachineContextBuilder;
 import br.com.camila.statemachine.statemachine.CustomStateMachineService;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
-@RabbitListener(queues = Messaging.QUEUE_PRE_PROPOSTA_ANALISADA)
+@RabbitListener(queues = Messaging.QUEUE_PRE_ANALISADA)
 @Slf4j
-public class PrePropostaAnalisadaListener extends AbstractStateMachineContextBuilder<Estados, Eventos> {
+public class PreAnalisadaListener extends AbstractStateMachineContextBuilder<Estados, Eventos> {
 
     @Autowired
     private CustomStateMachineService customStateMachineService;
 
     @RabbitHandler
-    void receive(@Payload final PrePropostaAnalisadaMessage message) {
+    void receive(@Payload final PreAnalisadaMessage message) {
 
         log.info("Mensagem: {}", message);
 
-        if (message.getProposta().equals(TipoProposta.CONTRATACAO_CCR)) {
+        if (message.getProposta().equals(Tipo.CARTAO_A)) {
             propostaCaptacaoCCR(message);
         }
 
-        if (message.getProposta().equals(TipoProposta.CONTRATACAO_MC)) {
+        if (message.getProposta().equals(Tipo.CARTAO_B)) {
             propostaContratacaoMC(message);
         }
     }
 
-    private void propostaContratacaoMC(final PrePropostaAnalisadaMessage message) {
+    private void propostaContratacaoMC(final PreAnalisadaMessage message) {
         if (message.getEstado().equals(Estados.NEGADO_PRE.toString())) {
             log.info("Enviando evento {} para StateMachine.", Eventos.NEGAR);
             customStateMachineService.sendEvent(message.getNumeroProposta(), Eventos.NEGAR, message.getProposta());
@@ -54,7 +54,7 @@ public class PrePropostaAnalisadaListener extends AbstractStateMachineContextBui
         }
     }
 
-    private void propostaCaptacaoCCR(final PrePropostaAnalisadaMessage message) {
+    private void propostaCaptacaoCCR(final PreAnalisadaMessage message) {
         if (message.getEstado().equals(Estados.NEGADO_PRE.toString())) {
             log.info("Enviando evento {} para StateMachine.", Eventos.NEGAR);
             customStateMachineService.sendEvent(message.getNumeroProposta(), Eventos.NEGAR, message.getProposta());

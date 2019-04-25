@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import br.com.camila.statemachine.domain.TipoProposta;
+import br.com.camila.statemachine.domain.Tipo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -17,11 +17,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class CriarPropostaMessage implements Serializable {
+public class PreAnalisadaMessage implements Serializable {
 
-    private static final long serialVersionUID = 3237658986214725680L;
+    private static final long serialVersionUID = -8326856682231137267L;
 
-    private String cpf;
+    private String estado;
 
-    private TipoProposta proposta;
+    private Long numeroProposta;
+
+    private Tipo proposta;
 }

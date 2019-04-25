@@ -12,18 +12,18 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.domain.TipoProposta;
-import br.com.camila.statemachine.service.captacaoccr.AnalisarPosPropostaService;
-import br.com.camila.statemachine.service.captacaoccr.AnalisarPrePropostaService;
-import br.com.camila.statemachine.service.captacaoccr.AtualizarEmailValidadoService;
-import br.com.camila.statemachine.service.captacaoccr.AtualizarInfosPessoaisService;
+import br.com.camila.statemachine.domain.Tipo;
+import br.com.camila.statemachine.service.cartaoa.AnalisarPosService;
+import br.com.camila.statemachine.service.cartaoa.AnalisarPreService;
+import br.com.camila.statemachine.service.cartaoa.AtualizarEmailValidadoService;
+import br.com.camila.statemachine.service.cartaoa.AtualizarInfosPessoaisService;
 
 @Configuration
-@EnableStateMachineFactory(name = "CONTRATACAO_CCR")
-public class ContratacaoCCRStateMachineConfig extends EnumStateMachineConfigurerAdapter<Estados, Eventos> {
+@EnableStateMachineFactory(name = "CARTAO_A")
+public class CartaoAStateMachineConfig extends EnumStateMachineConfigurerAdapter<Estados, Eventos> {
 
     @Autowired
-    private AnalisarPrePropostaService analisarPrePropostaService;
+    private AnalisarPreService analisarPreService;
 
     @Autowired
     private AtualizarInfosPessoaisService atualizarInfosPessoaisService;
@@ -32,12 +32,12 @@ public class ContratacaoCCRStateMachineConfig extends EnumStateMachineConfigurer
     private AtualizarEmailValidadoService atualizarEmailValidadoService;
 
     @Autowired
-    private AnalisarPosPropostaService analisarPosPropostaService;
+    private AnalisarPosService analisarPosService;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<Estados, Eventos> config) throws Exception {
         config.withConfiguration()
-            .machineId(TipoProposta.CONTRATACAO_CCR.name());
+            .machineId(Tipo.CARTAO_A.name());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ContratacaoCCRStateMachineConfig extends EnumStateMachineConfigurer
 
         states
             .withStates()
-            .initial(Estados.PROPOSTA_INEXISTENTE)
+            .initial(Estados.P_INEXISTENTE)
             .end(Estados.NEGADO_PRE)
             .end(Estados.NEGADO_POS)
             .states(EnumSet.allOf(Estados.class));
@@ -56,18 +56,18 @@ public class ContratacaoCCRStateMachineConfig extends EnumStateMachineConfigurer
         transitions
 
             .withExternal()
-            .source(Estados.PROPOSTA_INEXISTENTE)
-            .target(Estados.PROPOSTA_CRIADA)
+            .source(Estados.P_INEXISTENTE)
+            .target(Estados.P_CRIADA)
             .event(Eventos.INICIAR)
 
             .and()
             .withExternal()
-            .source(Estados.PROPOSTA_CRIADA)
+            .source(Estados.P_CRIADA)
             .target(Estados.ANALISE_PRE)
             .event(Eventos.ANALISAR)
             .action(
                 context -> {
-                    analisarPrePropostaService.executar(
+                    analisarPreService.executar(
                         context.getExtendedState().get("numeroProposta", Long.class),
                         context.getExtendedState().get("cpf", String.class));
                 }
@@ -118,7 +118,7 @@ public class ContratacaoCCRStateMachineConfig extends EnumStateMachineConfigurer
             .event(Eventos.ANALISAR)
             .action(
                 context -> {
-                    analisarPosPropostaService.executar(
+                    analisarPosService.executar(
                         context.getExtendedState().get("numeroProposta", Long.class),
                         context.getExtendedState().get("cpf", String.class));
                 }

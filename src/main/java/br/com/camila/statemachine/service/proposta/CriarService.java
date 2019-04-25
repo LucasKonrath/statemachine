@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.domain.TipoProposta;
+import br.com.camila.statemachine.domain.Tipo;
 import br.com.camila.statemachine.entity.Proposta;
 import br.com.camila.statemachine.repository.PropostaRepository;
 import br.com.camila.statemachine.statemachine.CustomStateMachineService;
 
 @Service
-public class CriarPropostaService {
+public class CriarService {
 
     @Autowired
     private CustomStateMachineService customStateMachineService;
@@ -21,15 +21,15 @@ public class CriarPropostaService {
     @Autowired
     private PropostaRepository repository;
 
-    public Proposta executar(String cpf, TipoProposta tipoProposta) {
+    public Proposta executar(String cpf, Tipo tipo) {
 
         Long numeroProposta = gerarNumeroProposta();
 
-        iniciarMaquinaDeEstados(numeroProposta, cpf, tipoProposta);
+        iniciarMaquinaDeEstados(numeroProposta, cpf, tipo);
 
         Proposta proposta = Proposta.builder()
-            .estado(customStateMachineService.getState(numeroProposta, tipoProposta))
-            .tipoProposta(tipoProposta.toString())
+            .estado(customStateMachineService.getState(numeroProposta, tipo))
+            .tipoProposta(tipo.toString())
             .numero(numeroProposta)
             .cpf(cpf).build();
 
@@ -42,7 +42,7 @@ public class CriarPropostaService {
         return ultimaProposta.getNumero() + 1L;
     }
 
-    private void iniciarMaquinaDeEstados(Long numeroProposta, String cpf, TipoProposta proposta) {
+    private void iniciarMaquinaDeEstados(Long numeroProposta, String cpf, Tipo proposta) {
 
         customStateMachineService.start(numeroProposta, proposta);
 

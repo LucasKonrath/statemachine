@@ -9,27 +9,27 @@ import org.springframework.stereotype.Service;
 
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.domain.TipoProposta;
+import br.com.camila.statemachine.domain.Tipo;
 
 @Service
 public class BuscarStateMachineService {
 
     @Autowired
-    @Qualifier("CONTRATACAO_CCR")
-    private StateMachineFactory<Estados, Eventos> contratacaoCCR;
+    @Qualifier("CARTAO_A")
+    private StateMachineFactory<Estados, Eventos> cartaoA;
 
     @Autowired
-    @Qualifier("CONTRATACAO_MC")
-    private StateMachineFactory<Estados, Eventos> contratacaoMC;
+    @Qualifier("CARTAO_B")
+    private StateMachineFactory<Estados, Eventos> cartaoB;
 
-    public StateMachine<Estados, Eventos> executar(final TipoProposta proposta) {
+    public StateMachine<Estados, Eventos> executar(final Tipo proposta) {
 
-        if (proposta.name().equals(TipoProposta.CONTRATACAO_CCR.name())) {
-            return contratacaoCCR.getStateMachine(proposta.name());
+        if (proposta.name().equals(Tipo.CARTAO_A.name())) {
+            return cartaoA.getStateMachine(proposta.name());
         }
 
-        if (proposta.name().equals(TipoProposta.CONTRATACAO_MC.name())) {
-            return contratacaoMC.getStateMachine(proposta.name());
+        if (proposta.name().equals(Tipo.CARTAO_B.name())) {
+            return cartaoB.getStateMachine(proposta.name());
         }
 
         return null;

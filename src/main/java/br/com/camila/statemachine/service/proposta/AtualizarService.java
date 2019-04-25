@@ -10,7 +10,7 @@ import br.com.camila.statemachine.entity.Proposta;
 import br.com.camila.statemachine.repository.PropostaRepository;
 
 @Service
-public class AtualizarPropostaService {
+public class AtualizarService {
 
     @Autowired
     private PropostaRepository repository;

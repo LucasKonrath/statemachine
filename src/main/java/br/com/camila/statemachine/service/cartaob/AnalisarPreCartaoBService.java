@@ -1,18 +1,18 @@
-package br.com.camila.statemachine.service.captacaomc;
+package br.com.camila.statemachine.service.cartaob;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.camila.statemachine.anotation.EventTemplate;
-import br.com.camila.statemachine.domain.TipoProposta;
-import br.com.camila.statemachine.message.AnalisarPrePropostaMotorMessage;
+import br.com.camila.statemachine.domain.Tipo;
+import br.com.camila.statemachine.message.AnalisarPreMotorMessage;
 import br.com.camila.statemachine.messaging.Messaging;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class AnalisarPrePropostaMcService {
+public class AnalisarPreCartaoBService {
 
     @Autowired
     @EventTemplate
@@ -20,10 +20,10 @@ public class AnalisarPrePropostaMcService {
 
     public void executar(final Long numeroProposta, final String cpf) {
 
-        AnalisarPrePropostaMotorMessage message = AnalisarPrePropostaMotorMessage.builder()
+        AnalisarPreMotorMessage message = AnalisarPreMotorMessage.builder()
             .cpf(cpf)
             .numeroProposta(numeroProposta)
-            .proposta(TipoProposta.CONTRATACAO_MC).build();
+            .proposta(Tipo.CARTAO_B).build();
 
         log.info("Analisa pré proposta número {}, contratacao_mc.", numeroProposta);
         eventTemplate.convertAndSend(

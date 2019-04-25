@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import br.com.camila.statemachine.config.statemachine.TransitionConfig;
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.domain.TipoProposta;
+import br.com.camila.statemachine.domain.Tipo;
 import br.com.camila.statemachine.repository.StateMachineRepository;
 
 @Service
@@ -31,29 +31,29 @@ public class CustomStateMachineService {
 
     private Map<String, StateMachine<Estados, Eventos>> cache = new ConcurrentHashMap<>();
 
-    public void start(final Long numeroProposta, final TipoProposta proposta) {
+    public void start(final Long numeroProposta, final Tipo proposta) {
         final StateMachine<Estados, Eventos> stateMachine = getStateMachine(numeroProposta.toString(), proposta);
         stateMachine.getExtendedState().getVariables().put("numeroProposta", numeroProposta);
         stateMachine.start();
     }
 
-    public String getState(final Long numeroProposta, final TipoProposta proposta) {
+    public String getState(final Long numeroProposta, final Tipo proposta) {
         final StateMachine<Estados, Eventos> stateMachine = getStateMachine(numeroProposta.toString(), proposta);
         return stateMachine.getState().getId().name();
     }
 
-    public void setVariables(final Long numeroProposta, final Map<String, Object> variables, final TipoProposta proposta) {
+    public void setVariables(final Long numeroProposta, final Map<String, Object> variables, final Tipo proposta) {
         final StateMachine<Estados, Eventos> stateMachine = getStateMachine(numeroProposta.toString(), proposta);
         stateMachine.getExtendedState().getVariables().putAll(variables);
     }
 
-    public void sendEvent(final Long numeroProposta, final Eventos evento, final TipoProposta proposta) {
+    public void sendEvent(final Long numeroProposta, final Eventos evento, final Tipo proposta) {
         final String id = numeroProposta.toString();
         final StateMachine<Estados, Eventos> stateMachine = getStateMachine(id, proposta);
         stateMachine.sendEvent(evento);
     }
 
-    public StateMachine getStateMachine(final String id, final TipoProposta proposta) {
+    public StateMachine getStateMachine(final String id, final Tipo proposta) {
 
         if (cache.containsKey(id)) {
             return cache.get(id);

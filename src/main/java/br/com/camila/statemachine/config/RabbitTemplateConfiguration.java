@@ -18,18 +18,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.camila.statemachine.anotation.EventTemplate;
 import br.com.camila.statemachine.anotation.RabbitEnabled;
-import br.com.camila.statemachine.domain.TipoProposta;
+import br.com.camila.statemachine.domain.Tipo;
 import br.com.camila.statemachine.interceptor.HeaderMessageInterceptor;
 import br.com.camila.statemachine.interceptor.TraceMessageInterceptor;
-import br.com.camila.statemachine.message.AnalisarPosPropostaMessage;
-import br.com.camila.statemachine.message.AnalisarPosPropostaMotorMessage;
-import br.com.camila.statemachine.message.AnalisarPrePropostaMessage;
-import br.com.camila.statemachine.message.AnalisarPrePropostaMotorMessage;
+import br.com.camila.statemachine.message.AnalisarPosMessage;
+import br.com.camila.statemachine.message.AnalisarPosMotorMessage;
+import br.com.camila.statemachine.message.AnalisarPreMessage;
+import br.com.camila.statemachine.message.AnalisarPreMotorMessage;
 import br.com.camila.statemachine.message.AtualizarEmailValidadoMessage;
 import br.com.camila.statemachine.message.AtualizarInfosPessoaisMessage;
-import br.com.camila.statemachine.message.CriarPropostaMessage;
-import br.com.camila.statemachine.message.PosPropostaAnalisadaMessage;
-import br.com.camila.statemachine.message.PrePropostaAnalisadaMessage;
+import br.com.camila.statemachine.message.CriarMessage;
+import br.com.camila.statemachine.message.PosAnalisadaMessage;
+import br.com.camila.statemachine.message.PreAnalisadaMessage;
 import br.com.camila.statemachine.messaging.MessageOutbox;
 import br.com.camila.statemachine.messaging.Messaging;
 
@@ -62,16 +62,16 @@ public class RabbitTemplateConfiguration {
 
         final Map<String, Class<?>> mapping = new HashMap<>();
         asList(
-            CriarPropostaMessage.class,
-            AnalisarPrePropostaMessage.class,
-            PrePropostaAnalisadaMessage.class,
-            AnalisarPrePropostaMotorMessage.class,
+            CriarMessage.class,
+            AnalisarPreMessage.class,
+            PreAnalisadaMessage.class,
+            AnalisarPreMotorMessage.class,
             AtualizarInfosPessoaisMessage.class,
             AtualizarEmailValidadoMessage.class,
-            AnalisarPosPropostaMessage.class,
-            AnalisarPosPropostaMotorMessage.class,
-            PosPropostaAnalisadaMessage.class,
-            TipoProposta.class)
+            AnalisarPosMessage.class,
+            AnalisarPosMotorMessage.class,
+            PosAnalisadaMessage.class,
+            Tipo.class)
             .forEach(clazz -> mapping.put(clazz.getSimpleName(), clazz));
 
         final DefaultClassMapper classMapper = new DefaultClassMapper();

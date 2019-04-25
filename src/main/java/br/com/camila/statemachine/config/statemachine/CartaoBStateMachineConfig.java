@@ -12,20 +12,20 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 
 import br.com.camila.statemachine.domain.Estados;
 import br.com.camila.statemachine.domain.Eventos;
-import br.com.camila.statemachine.domain.TipoProposta;
-import br.com.camila.statemachine.service.captacaomc.AnalisarPrePropostaMcService;
+import br.com.camila.statemachine.domain.Tipo;
+import br.com.camila.statemachine.service.cartaob.AnalisarPreCartaoBService;
 
 @Configuration
-@EnableStateMachineFactory(name = "CONTRATACAO_MC")
-public class ContratacaoMCStateMachineConfig extends EnumStateMachineConfigurerAdapter<Estados, Eventos> {
+@EnableStateMachineFactory(name = "CARTAO_B")
+public class CartaoBStateMachineConfig extends EnumStateMachineConfigurerAdapter<Estados, Eventos> {
 
     @Autowired
-    private AnalisarPrePropostaMcService analisarPrePropostaMcService;
+    private AnalisarPreCartaoBService analisarPreCartaoBService;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<Estados, Eventos> config) throws Exception {
         config.withConfiguration()
-            .machineId(TipoProposta.CONTRATACAO_MC.name());
+            .machineId(Tipo.CARTAO_B.name());
     }
 
     @Override
@@ -33,7 +33,7 @@ public class ContratacaoMCStateMachineConfig extends EnumStateMachineConfigurerA
 
         states
             .withStates()
-            .initial(Estados.PROPOSTA_INEXISTENTE)
+            .initial(Estados.P_INEXISTENTE)
             .end(Estados.NEGADO_PRE)
             .states(EnumSet.allOf(Estados.class));
     }
@@ -43,18 +43,18 @@ public class ContratacaoMCStateMachineConfig extends EnumStateMachineConfigurerA
         transitions
 
             .withExternal()
-            .source(Estados.PROPOSTA_INEXISTENTE)
-            .target(Estados.PROPOSTA_CRIADA)
+            .source(Estados.P_INEXISTENTE)
+            .target(Estados.P_CRIADA)
             .event(Eventos.INICIAR)
 
             .and()
             .withExternal()
-            .source(Estados.PROPOSTA_CRIADA)
+            .source(Estados.P_CRIADA)
             .target(Estados.ANALISE_PRE)
             .event(Eventos.ANALISAR)
             .action(
                 context -> {
-                    analisarPrePropostaMcService.executar(
+                    analisarPreCartaoBService.executar(
                         context.getExtendedState().get("numeroProposta", Long.class),
                         context.getExtendedState().get("cpf", String.class));
                 }
